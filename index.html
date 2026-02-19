@@ -4,96 +4,442 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Merged Feed</title>
+  <meta name="color-scheme" content="light dark" />
   <style>
-    body { font-family: system-ui, Arial, sans-serif; max-width: 900px; margin: 24px auto; padding: 0 16px; }
-    h1 { margin: 0 0 8px; }
-    .meta { color: #555; margin-bottom: 16px; }
-    .item { padding: 14px 0; border-top: 1px solid #e5e5e5; }
-    .item:first-of-type { border-top: 0; }
-    .title { font-size: 18px; font-weight: 700; margin: 0 0 6px; }
-    .title a { color: inherit; text-decoration: none; }
-    .title a:hover { text-decoration: underline; }
-    .date { color: #666; font-size: 13px; margin-bottom: 8px; }
-    .desc { color: #222; line-height: 1.4; }
-    .toplinks a { margin-right: 12px; }
-    code { background: #f3f3f3; padding: 2px 6px; border-radius: 6px; }
-  </style>
-</head>
-<body>
-  <h1>Merged Feed</h1>
-  <div class="meta">
-    <div class="toplinks">
-      <a href="./merged.xml">RSS feed</a>
-      <a href="https://validator.w3.org/feed/#validate_by_uri+https%3A%2F%2Fjumangs.github.io%2Frss-merged-feed%2Fmerged.xml">Validate</a>
-    </div>
-    <div>Source: <code>merged.xml</code></div>
-  </div>
-
-  <div id="status">Loading…</div>
-  <div id="list"></div>
-
-  <script>
-    function text(el, tag) {
-      const n = el.getElementsByTagName(tag)[0];
-      return n ? n.textContent.trim() : "";
+    :root{
+      --bg: #0b0c10;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.65);
+      --border: rgba(255,255,255,0.12);
+      --accent: #8bd3ff;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 16px;
+      --maxw: 980px;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f6f7fb;
+        --panel: rgba(0,0,0,0.03);
+        --panel2: rgba(0,0,0,0.05);
+        --text: rgba(0,0,0,0.86);
+        --muted: rgba(0,0,0,0.55);
+        --border: rgba(0,0,0,0.12);
+        --accent: #0066ff;
+        --shadow: 0 10px 30px rgba(0,0,0,0.10);
+      }
     }
 
-    function asDate(pubDate) {
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      background: radial-gradient(1200px 600px at 30% 0%, rgba(139,211,255,0.18), transparent 55%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(0,102,255,0.12), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+    }
+    a{ color: var(--accent); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+
+    .wrap{ max-width: var(--maxw); margin: 28px auto; padding: 0 16px 40px; }
+
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--panel2), var(--panel));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .title{
+      display:flex; flex-direction:column; gap:6px;
+    }
+    h1{ margin:0; font-size: 28px; letter-spacing: -0.02em; }
+    .sub{ color: var(--muted); font-size: 14px; line-height: 1.3; }
+    .links{ display:flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .pill:hover{ background: rgba(255,255,255,0.08); text-decoration:none; }
+
+    .controls{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-width: 320px;
+      width: 360px;
+      max-width: 100%;
+    }
+    .row{ display:flex; gap:10px; }
+    input[type="search"]{
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      outline: none;
+    }
+    input[type="search"]::placeholder{ color: var(--muted); }
+    select, button{
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      cursor: pointer;
+    }
+    button:hover{ background: rgba(255,255,255,0.08); }
+
+    .metaLine{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .list{ margin-top: 16px; display:flex; flex-direction:column; gap: 12px; }
+
+    .card{
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--panel2), var(--panel));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardInner{ padding: 16px 16px 14px; }
+
+    .cardTop{
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+      justify-content:space-between;
+    }
+    .cardTitle{
+      font-size: 18px;
+      font-weight: 750;
+      letter-spacing: -0.01em;
+      margin:0 0 6px;
+      line-height: 1.2;
+    }
+    .cardTitle a{ color: var(--text); }
+    .cardTitle a:hover{ text-decoration: underline; }
+
+    .cardMeta{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .preview{
+      margin-top: 12px;
+      color: var(--text);
+      line-height: 1.45;
+      font-size: 14px;
+    }
+    .preview img{ display:none; }        /* hide big images in preview */
+    .preview h1,.preview h2,.preview h3,.preview h4{ margin: 10px 0 6px; }
+    .preview a{ color: var(--accent); }
+    .preview ul{ padding-left: 18px; margin: 8px 0; }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .btnLink{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      text-decoration:none;
+      font-size: 13px;
+    }
+    .btnLink:hover{ background: rgba(255,255,255,0.08); text-decoration:none; }
+
+    details{
+      margin-top: 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+    summary{
+      cursor:pointer;
+      color: var(--accent);
+      font-size: 13px;
+      list-style: none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .full{
+      margin-top: 10px;
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .full img{
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin: 10px 0;
+    }
+
+    .empty{
+      padding: 18px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="title">
+        <h1>Merged Feed</h1>
+        <div class="sub">
+          Human-friendly view of <a href="./merged.xml">merged.xml</a>
+        </div>
+        <div class="links">
+          <a class="pill" href="./merged.xml">RSS feed</a>
+          <a class="pill" href="https://validator.w3.org/feed/#validate_by_uri+https%3A%2F%2Fjumangs.github.io%2Frss-merged-feed%2Fmerged.xml">Validate</a>
+        </div>
+        <div class="metaLine" id="status">Loading…</div>
+      </div>
+
+      <div class="controls">
+        <input id="q" type="search" placeholder="Search titles and previews…" />
+        <div class="row">
+          <select id="mode">
+            <option value="preview">Preview mode (clean)</option>
+            <option value="full">Full mode (shows all HTML)</option>
+          </select>
+          <button id="clear" type="button">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="list" id="list"></div>
+  </div>
+
+  <script>
+    function firstTagText(el, tag) {
+      const n = el.getElementsByTagName(tag)[0];
+      return n ? (n.textContent || "").trim() : "";
+    }
+
+    function stripHtml(html) {
+      const tmp = document.createElement("div");
+      tmp.innerHTML = html || "";
+      return (tmp.textContent || tmp.innerText || "").trim();
+    }
+
+    function clampText(s, maxLen) {
+      if (!s) return "";
+      if (s.length <= maxLen) return s;
+      return s.slice(0, maxLen).trimEnd() + "…";
+    }
+
+    function hostnameFromUrl(url) {
+      try { return new URL(url).hostname.replace(/^www\./, ""); }
+      catch { return ""; }
+    }
+
+    function niceDate(pubDate) {
       if (!pubDate) return "";
       const d = new Date(pubDate);
       if (isNaN(d.getTime())) return pubDate;
       return d.toLocaleString();
     }
 
-    async function load() {
+    async function loadFeed() {
       const res = await fetch("./merged.xml", { cache: "no-store" });
       if (!res.ok) throw new Error("Failed to fetch merged.xml: " + res.status);
       const xmlText = await res.text();
       const doc = new DOMParser().parseFromString(xmlText, "application/xml");
 
-      const items = Array.from(doc.getElementsByTagName("item"));
-      const list = document.getElementById("list");
-      const status = document.getElementById("status");
+      const items = Array.from(doc.getElementsByTagName("item")).map(item => {
+        const title = firstTagText(item, "title") || "(no title)";
+        const link = firstTagText(item, "link") || "";
+        const pubDate = firstTagText(item, "pubDate") || "";
+        const descHtml = firstTagText(item, "description") || "";
+        const descText = stripHtml(descHtml);
 
-      status.textContent = `Loaded ${items.length} items.`;
+        return {
+          title,
+          link,
+          host: hostnameFromUrl(link),
+          pubDate,
+          pubNice: niceDate(pubDate),
+          descHtml,
+          preview: clampText(descText, 280)
+        };
+      });
+
+      return items;
+    }
+
+    function render(items, mode, query) {
+      const list = document.getElementById("list");
+      const q = (query || "").toLowerCase().trim();
+
+      const filtered = !q ? items : items.filter(it =>
+        it.title.toLowerCase().includes(q) || it.preview.toLowerCase().includes(q)
+      );
+
+      document.getElementById("status").textContent =
+        `Loaded ${items.length} items. Showing ${filtered.length}.`;
+
       list.innerHTML = "";
 
-      for (const item of items) {
-        const title = text(item, "title") || "(no title)";
-        const link = text(item, "link");
-        const pubDate = text(item, "pubDate");
-        const desc = text(item, "description");
+      if (filtered.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "No results. Try a different search.";
+        list.appendChild(empty);
+        return;
+      }
 
-        const wrap = document.createElement("div");
-        wrap.className = "item";
+      for (const it of filtered) {
+        const card = document.createElement("div");
+        card.className = "card";
 
-        const h = document.createElement("div");
-        h.className = "title";
+        const inner = document.createElement("div");
+        inner.className = "cardInner";
+
+        const title = document.createElement("h2");
+        title.className = "cardTitle";
         const a = document.createElement("a");
-        a.href = link || "#";
+        a.href = it.link || "#";
         a.target = "_blank";
         a.rel = "noopener noreferrer";
-        a.textContent = title;
-        h.appendChild(a);
+        a.textContent = it.title;
+        title.appendChild(a);
 
-        const d = document.createElement("div");
-        d.className = "date";
-        d.textContent = asDate(pubDate);
+        const meta = document.createElement("div");
+        meta.className = "cardMeta";
+        const date = document.createElement("span");
+        date.textContent = it.pubNice || "";
+        meta.appendChild(date);
 
-        const p = document.createElement("div");
-        p.className = "desc";
-        p.innerHTML = desc; // RSS descriptions often contain HTML
+        if (it.host) {
+          const tag = document.createElement("span");
+          tag.className = "tag";
+          tag.textContent = it.host;
+          meta.appendChild(tag);
+        }
 
-        wrap.appendChild(h);
-        wrap.appendChild(d);
-        wrap.appendChild(p);
-        list.appendChild(wrap);
+        const preview = document.createElement("div");
+        preview.className = "preview";
+
+        if (mode === "preview") {
+          preview.textContent = it.preview || "";
+        } else {
+          preview.className = "full";
+          preview.innerHTML = it.descHtml || "";
+        }
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        const open = document.createElement("a");
+        open.className = "btnLink";
+        open.href = it.link || "#";
+        open.target = "_blank";
+        open.rel = "noopener noreferrer";
+        open.textContent = "Open article";
+        actions.appendChild(open);
+
+        if (mode === "preview" && it.descHtml && it.descHtml.trim().length > 0) {
+          const details = document.createElement("details");
+
+          const sum = document.createElement("summary");
+          sum.textContent = "Show full content";
+          details.appendChild(sum);
+
+          const full = document.createElement("div");
+          full.className = "full";
+          full.innerHTML = it.descHtml;
+          details.appendChild(full);
+
+          inner.appendChild(title);
+          inner.appendChild(meta);
+          inner.appendChild(preview);
+          inner.appendChild(actions);
+          inner.appendChild(details);
+        } else {
+          inner.appendChild(title);
+          inner.appendChild(meta);
+          inner.appendChild(preview);
+          inner.appendChild(actions);
+        }
+
+        card.appendChild(inner);
+        list.appendChild(card);
       }
     }
 
-    load().catch(err => {
-      document.getElementById("status").textContent = err.message;
-    });
+    (async function init(){
+      const qInput = document.getElementById("q");
+      const modeSel = document.getElementById("mode");
+      const clearBtn = document.getElementById("clear");
+
+      let items = [];
+      let mode = "preview";
+
+      try {
+        items = await loadFeed();
+      } catch (e) {
+        document.getElementById("status").textContent = e.message;
+        return;
+      }
+
+      function rerender(){
+        render(items, modeSel.value, qInput.value);
+      }
+
+      qInput.addEventListener("input", rerender);
+      modeSel.addEventListener("change", rerender);
+      clearBtn.addEventListener("click", () => {
+        qInput.value = "";
+        modeSel.value = "preview";
+        rerender();
+      });
+
+      rerender();
+    })();
   </script>
 </body>
 </html>
