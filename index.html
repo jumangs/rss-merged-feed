@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Merged Feed</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    h1 { margin: 0 0 8px; }
+    .meta { color: #555; margin-bottom: 16px; }
+    .item { padding: 14px 0; border-top: 1px solid #e5e5e5; }
+    .item:first-of-type { border-top: 0; }
+    .title { font-size: 18px; font-weight: 700; margin: 0 0 6px; }
+    .title a { color: inherit; text-decoration: none; }
+    .title a:hover { text-decoration: underline; }
+    .date { color: #666; font-size: 13px; margin-bottom: 8px; }
+    .desc { color: #222; line-height: 1.4; }
+    .toplinks a { margin-right: 12px; }
+    code { background: #f3f3f3; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Merged Feed</h1>
+  <div class="meta">
+    <div class="toplinks">
+      <a href="./merged.xml">RSS feed</a>
+      <a href="https://validator.w3.org/feed/#validate_by_uri+https%3A%2F%2Fjumangs.github.io%2Frss-merged-feed%2Fmerged.xml">Validate</a>
+    </div>
+    <div>Source: <code>merged.xml</code></div>
+  </div>
+
+  <div id="status">Loading…</div>
+  <div id="list"></div>
+
+  <script>
+    function text(el, tag) {
+      const n = el.getElementsByTagName(tag)[0];
+      return n ? n.textContent.trim() : "";
+    }
+
+    function asDate(pubDate) {
+      if (!pubDate) return "";
+      const d = new Date(pubDate);
+      if (isNaN(d.getTime())) return pubDate;
+      return d.toLocaleString();
+    }
+
+    async function load() {
+      const res = await fetch("./merged.xml", { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to fetch merged.xml: " + res.status);
+      const xmlText = await res.text();
+      const doc = new DOMParser().parseFromString(xmlText, "application/xml");
+
+      const items = Array.from(doc.getElementsByTagName("item"));
+      const list = document.getElementById("list");
+      const status = document.getElementById("status");
+
+      status.textContent = `Loaded ${items.length} items.`;
+      list.innerHTML = "";
+
+      for (const item of items) {
+        const title = text(item, "title") || "(no title)";
+        const link = text(item, "link");
+        const pubDate = text(item, "pubDate");
+        const desc = text(item, "description");
+
+        const wrap = document.createElement("div");
+        wrap.className = "item";
+
+        const h = document.createElement("div");
+        h.className = "title";
+        const a = document.createElement("a");
+        a.href = link || "#";
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = title;
+        h.appendChild(a);
+
+        const d = document.createElement("div");
+        d.className = "date";
+        d.textContent = asDate(pubDate);
+
+        const p = document.createElement("div");
+        p.className = "desc";
+        p.innerHTML = desc; // RSS descriptions often contain HTML
+
+        wrap.appendChild(h);
+        wrap.appendChild(d);
+        wrap.appendChild(p);
+        list.appendChild(wrap);
+      }
+    }
+
+    load().catch(err => {
+      document.getElementById("status").textContent = err.message;
+    });
+  </script>
+</body>
+</html>
