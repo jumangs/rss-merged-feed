@@ -6,97 +6,46 @@
   <title>Merged Feed</title>
   <meta name="color-scheme" content="light dark" />
   <style>
-    :root{
-      --bg:#0b0c10; --panel:rgba(255,255,255,0.06); --panel2:rgba(255,255,255,0.10);
-      --text:rgba(255,255,255,0.92); --muted:rgba(255,255,255,0.65);
-      --border:rgba(255,255,255,0.12); --accent:#8bd3ff; --shadow:0 10px 30px rgba(0,0,0,0.35);
-      --radius:16px; --maxw:980px;
-    }
-    @media (prefers-color-scheme: light){
-      :root{ --bg:#f6f7fb; --panel:rgba(0,0,0,0.03); --panel2:rgba(0,0,0,0.05);
-        --text:rgba(0,0,0,0.86); --muted:rgba(0,0,0,0.55); --border:rgba(0,0,0,0.12);
-        --accent:#0066ff; --shadow:0 10px 30px rgba(0,0,0,0.10);
-      }
-    }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 30% 0%, rgba(139,211,255,0.18), transparent 55%),
-                  radial-gradient(900px 500px at 90% 10%, rgba(0,102,255,0.12), transparent 60%), var(--bg);
-      color:var(--text);
-    }
-    a{ color:var(--accent); text-decoration:none; }
-    a:hover{ text-decoration:underline; }
-    .wrap{ max-width:var(--maxw); margin:28px auto; padding:0 16px 40px; }
-    .top{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:14px; padding:18px;
-      border:1px solid var(--border); background:linear-gradient(180deg,var(--panel2),var(--panel));
-      border-radius:var(--radius); box-shadow:var(--shadow);
-    }
-    h1{ margin:0; font-size:28px; letter-spacing:-0.02em; }
-    .sub{ color:var(--muted); font-size:14px; line-height:1.3; }
-    .links{ display:flex; gap:12px; flex-wrap:wrap; margin-top:6px; }
-    .pill, select, button, input[type="search"]{
-      border:1px solid var(--border); background:rgba(255,255,255,0.04); color:var(--text);
-      border-radius:12px; padding:10px 12px; font-size:13px;
-    }
-    .pill{ display:inline-flex; align-items:center; gap:8px; border-radius:999px; padding:8px 12px; }
-    .pill:hover, button:hover{ background:rgba(255,255,255,0.08); text-decoration:none; cursor:pointer; }
-    input[type="search"]{ width:100%; outline:none; }
-    input[type="search"]::placeholder{ color:var(--muted); }
-    .controls{ display:flex; flex-direction:column; gap:10px; min-width:320px; width:420px; max-width:100%; }
-    .row{ display:flex; gap:10px; }
-    .row > *{ flex:1; }
-    .metaLine{ margin-top:10px; color:var(--muted); font-size:13px; }
-    .list{ margin-top:16px; display:flex; flex-direction:column; gap:12px; }
-    .card{ border:1px solid var(--border); background:linear-gradient(180deg,var(--panel2),var(--panel));
-      border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
-    .cardInner{ padding:16px 16px 14px; }
-    .cardTitle{ font-size:18px; font-weight:750; letter-spacing:-0.01em; margin:0 0 6px; line-height:1.2; }
-    .cardTitle a{ color:var(--text); }
-    .cardMeta{ display:flex; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:13px; }
-    .tag{ display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px; border:1px solid var(--border);
-      background:rgba(255,255,255,0.04); font-size:12px; color:var(--muted); }
-    .preview{ margin-top:12px; color:var(--text); line-height:1.45; font-size:14px; }
-    .actions{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; align-items:center; }
-    .btnLink{ display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:12px;
-      border:1px solid var(--border); background:rgba(255,255,255,0.04); color:var(--text); text-decoration:none; font-size:13px; }
-    .btnLink:hover{ background:rgba(255,255,255,0.08); text-decoration:none; }
-    .toast{
-      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
-      background:rgba(0,0,0,0.75); color:#fff; padding:10px 12px; border-radius:12px;
-      border:1px solid rgba(255,255,255,0.18); display:none; max-width: 92vw;
-    }
-    @media (prefers-color-scheme: light){
-      .toast{ background:rgba(0,0,0,0.78); }
-    }
-    .empty{ padding:18px; border:1px dashed var(--border); border-radius:var(--radius); color:var(--muted); text-align:center; }
+    :root{--bg:#0b0c10;--panel:rgba(255,255,255,0.06);--panel2:rgba(255,255,255,0.10);--text:rgba(255,255,255,0.92);--muted:rgba(255,255,255,0.65);--border:rgba(255,255,255,0.12);--accent:#8bd3ff;--shadow:0 10px 30px rgba(0,0,0,0.35);--radius:16px;--maxw:980px;}
+    @media (prefers-color-scheme: light){:root{--bg:#f6f7fb;--panel:rgba(0,0,0,0.03);--panel2:rgba(0,0,0,0.05);--text:rgba(0,0,0,0.86);--muted:rgba(0,0,0,0.55);--border:rgba(0,0,0,0.12);--accent:#0066ff;--shadow:0 10px 30px rgba(0,0,0,0.10);}}
+    *{box-sizing:border-box;} body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);}
+    a{color:var(--accent);text-decoration:none;} a:hover{text-decoration:underline;}
+    .wrap{max-width:var(--maxw);margin:28px auto;padding:0 16px 40px;}
+    .top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px;border:1px solid var(--border);background:linear-gradient(180deg,var(--panel2),var(--panel));border-radius:var(--radius);box-shadow:var(--shadow);}
+    h1{margin:0;font-size:28px;}
+    .sub{color:var(--muted);font-size:14px;margin-top:6px;}
+    .controls{display:flex;flex-direction:column;gap:10px;min-width:320px;width:420px;max-width:100%;}
+    input,select,button{border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text);border-radius:12px;padding:10px 12px;font-size:13px;}
+    input{width:100%;outline:none;} input::placeholder{color:var(--muted);}
+    .row{display:flex;gap:10px;} .row>*{flex:1;}
+    .metaLine{margin-top:10px;color:var(--muted);font-size:13px;}
+    .list{margin-top:16px;display:flex;flex-direction:column;gap:12px;}
+    .card{border:1px solid var(--border);background:linear-gradient(180deg,var(--panel2),var(--panel));border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+    .cardInner{padding:16px 16px 14px;}
+    .cardTitle{font-size:18px;font-weight:750;margin:0 0 6px;line-height:1.2;}
+    .cardTitle a{color:var(--text);}
+    .cardMeta{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px;}
+    .tag{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,0.04);font-size:12px;color:var(--muted);}
+    .preview{margin-top:12px;line-height:1.45;font-size:14px;}
+    .actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center;}
+    .btnLink{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text);text-decoration:none;font-size:13px;}
+    .btnLink:hover{background:rgba(255,255,255,0.08);text-decoration:none;}
+    .empty{padding:18px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--muted);text-align:center;}
   </style>
 </head>
-
 <body>
   <div class="wrap">
     <div class="top">
-      <div class="title">
+      <div>
         <h1>Merged Feed</h1>
-        <div class="sub">Human-friendly view of <a href="./merged.xml">merged.xml</a> and site feeds under <a href="./feeds/">/feeds/</a></div>
-        <div class="links">
-          <a class="pill" href="./merged.xml">RSS feed</a>
-          <a class="pill" href="./feeds/">Site feeds folder</a>
+        <div class="sub">
+          Merged RSS: <a href="./merged.xml">./merged.xml</a> |
+          Split feeds: <a href="./feeds/">./feeds/</a>
         </div>
         <div class="metaLine" id="status">Loading…</div>
       </div>
-
       <div class="controls">
         <input id="q" type="search" placeholder="Search titles and previews…" />
-
-        <div class="row">
-          <select id="site">
-            <option value="">All sites</option>
-          </select>
-          <button id="copy" type="button">Copy feed URL</button>
-        </div>
-
         <div class="row">
           <select id="mode">
             <option value="preview">Preview mode</option>
@@ -110,242 +59,138 @@
     <div class="list" id="list"></div>
   </div>
 
-  <div class="toast" id="toast"></div>
+<script>
+  function firstTagText(el, tag) {
+    const n = el.getElementsByTagName(tag)[0];
+    return n ? (n.textContent || "").trim() : "";
+  }
+  function stripHtml(html) {
+    const tmp = document.createElement("div");
+    tmp.innerHTML = html || "";
+    return (tmp.textContent || tmp.innerText || "").trim();
+  }
+  function clampText(s, maxLen) {
+    if (!s) return "";
+    if (s.length <= maxLen) return s;
+    return s.slice(0, maxLen).trimEnd() + "…";
+  }
+  function hostnameFromUrl(url) {
+    try { return new URL(url).hostname.replace(/^www\./, ""); }
+    catch { return "unknown"; }
+  }
+  function niceDate(pubDate) {
+    if (!pubDate) return "";
+    const d = new Date(pubDate);
+    if (isNaN(d.getTime())) return pubDate;
+    return d.toLocaleString();
+  }
 
-  <script>
-    function firstTagText(el, tag) {
-      const n = el.getElementsByTagName(tag)[0];
-      return n ? (n.textContent || "").trim() : "";
+  async function loadFeed() {
+    const res = await fetch("./merged.xml", { cache: "no-store" });
+    if (!res.ok) throw new Error("Failed to fetch merged.xml: " + res.status);
+    const xmlText = await res.text();
+    const doc = new DOMParser().parseFromString(xmlText, "application/xml");
+    return Array.from(doc.getElementsByTagName("item")).map(item => {
+      const title = firstTagText(item, "title") || "(no title)";
+      const link = firstTagText(item, "link") || "";
+      const pubDate = firstTagText(item, "pubDate") || "";
+      const descHtml = firstTagText(item, "description") || "";
+      const host = hostnameFromUrl(link);
+      return {
+        title, link, host,
+        pubNice: niceDate(pubDate),
+        descHtml,
+        preview: clampText(stripHtml(descHtml), 280)
+      };
+    });
+  }
+
+  function render(items, mode, query) {
+    const list = document.getElementById("list");
+    const q = (query || "").toLowerCase().trim();
+    const filtered = !q ? items : items.filter(it =>
+      it.title.toLowerCase().includes(q) ||
+      it.preview.toLowerCase().includes(q) ||
+      it.host.toLowerCase().includes(q)
+    );
+
+    document.getElementById("status").textContent = `Loaded ${items.length} items. Showing ${filtered.length}.`;
+    list.innerHTML = "";
+
+    if (filtered.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "No results.";
+      list.appendChild(empty);
+      return;
     }
 
-    function stripHtml(html) {
-      const tmp = document.createElement("div");
-      tmp.innerHTML = html || "";
-      return (tmp.textContent || tmp.innerText || "").trim();
+    for (const it of filtered) {
+      const card = document.createElement("div");
+      card.className = "card";
+      const inner = document.createElement("div");
+      inner.className = "cardInner";
+
+      const h = document.createElement("h2");
+      h.className = "cardTitle";
+      const a = document.createElement("a");
+      a.href = it.link || "#";
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = it.title;
+      h.appendChild(a);
+
+      const meta = document.createElement("div");
+      meta.className = "cardMeta";
+      const date = document.createElement("span");
+      date.textContent = it.pubNice || "";
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = it.host;
+      meta.appendChild(date);
+      meta.appendChild(tag);
+
+      const body = document.createElement("div");
+      body.className = "preview";
+      body.innerHTML = (mode === "full") ? (it.descHtml || "") : (it.preview || "");
+
+      const actions = document.createElement("div");
+      actions.className = "actions";
+      const open = document.createElement("a");
+      open.className = "btnLink";
+      open.href = it.link || "#";
+      open.target = "_blank";
+      open.rel = "noopener noreferrer";
+      open.textContent = "Open article";
+      actions.appendChild(open);
+
+      inner.appendChild(h);
+      inner.appendChild(meta);
+      inner.appendChild(body);
+      inner.appendChild(actions);
+      card.appendChild(inner);
+      list.appendChild(card);
+    }
+  }
+
+  (async function init(){
+    const qInput = document.getElementById("q");
+    const modeSel = document.getElementById("mode");
+    const clearBtn = document.getElementById("clear");
+
+    let items = [];
+    try { items = await loadFeed(); }
+    catch (e) {
+      document.getElementById("status").textContent = e.message;
+      return;
     }
 
-    function clampText(s, maxLen) {
-      if (!s) return "";
-      if (s.length <= maxLen) return s;
-      return s.slice(0, maxLen).trimEnd() + "…";
-    }
-
-    function hostnameFromUrl(url) {
-      try { return new URL(url).hostname.replace(/^www\./, ""); }
-      catch { return ""; }
-    }
-
-    function hostToSlug(host) {
-      return (host || "unknown")
-        .toLowerCase()
-        .replace(/^www\./, "")
-        .replace(/[^a-z0-9.-]+/g, "-")
-        .replace(/^\-+|\-+$/g, "")
-        .replace(/\./g, "-")
-        .replace(/\-+/g, "-") || "unknown";
-    }
-
-    function niceDate(pubDate) {
-      if (!pubDate) return "";
-      const d = new Date(pubDate);
-      if (isNaN(d.getTime())) return pubDate;
-      return d.toLocaleString();
-    }
-
-    function showToast(msg) {
-      const t = document.getElementById("toast");
-      t.textContent = msg;
-      t.style.display = "block";
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => t.style.display = "none", 1800);
-    }
-
-    async function loadFeed() {
-      const res = await fetch("./merged.xml", { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to fetch merged.xml: " + res.status);
-      const xmlText = await res.text();
-      const doc = new DOMParser().parseFromString(xmlText, "application/xml");
-
-      const items = Array.from(doc.getElementsByTagName("item")).map(item => {
-        const title = firstTagText(item, "title") || "(no title)";
-        const link = firstTagText(item, "link") || "";
-        const pubDate = firstTagText(item, "pubDate") || "";
-        const descHtml = firstTagText(item, "description") || "";
-        const descText = stripHtml(descHtml);
-        const host = hostnameFromUrl(link) || "unknown";
-        const slug = hostToSlug(host);
-
-        return {
-          title, link,
-          host, slug,
-          pubDate, pubNice: niceDate(pubDate),
-          descHtml,
-          preview: clampText(descText, 280)
-        };
-      });
-
-      return items;
-    }
-
-    function populateSites(items) {
-      const siteSel = document.getElementById("site");
-      const existing = new Set(Array.from(siteSel.options).map(o => o.value));
-      const counts = new Map();
-
-      for (const it of items) {
-        counts.set(it.host, (counts.get(it.host) || 0) + 1);
-      }
-
-      const hosts = Array.from(counts.keys()).sort((a,b) => a.localeCompare(b));
-      for (const h of hosts) {
-        const v = h;
-        if (existing.has(v)) continue;
-        const opt = document.createElement("option");
-        opt.value = v;
-        opt.textContent = `${h} (${counts.get(h)})`;
-        siteSel.appendChild(opt);
-      }
-    }
-
-    function feedUrlForSelectedSite() {
-      const siteSel = document.getElementById("site");
-      const host = siteSel.value;
-      if (!host) return location.origin + location.pathname.replace(/\/$/, "") + "/merged.xml";
-      const slug = hostToSlug(host);
-      const base = location.origin + location.pathname.replace(/\/$/, "");
-      return `${base}/feeds/${slug}.xml`;
-    }
-
-    function render(items, mode, query, siteHost) {
-      const list = document.getElementById("list");
-      const q = (query || "").toLowerCase().trim();
-
-      let filtered = items;
-
-      if (siteHost) {
-        filtered = filtered.filter(it => it.host === siteHost);
-      }
-      if (q) {
-        filtered = filtered.filter(it =>
-          it.title.toLowerCase().includes(q) || it.preview.toLowerCase().includes(q) || it.host.toLowerCase().includes(q)
-        );
-      }
-
-      const siteLabel = siteHost ? `Site: ${siteHost}. ` : "";
-      document.getElementById("status").textContent =
-        `${siteLabel}Loaded ${items.length} items. Showing ${filtered.length}.`;
-
-      list.innerHTML = "";
-
-      if (filtered.length === 0) {
-        const empty = document.createElement("div");
-        empty.className = "empty";
-        empty.textContent = "No results. Try a different search or site filter.";
-        list.appendChild(empty);
-        return;
-      }
-
-      for (const it of filtered) {
-        const card = document.createElement("div");
-        card.className = "card";
-
-        const inner = document.createElement("div");
-        inner.className = "cardInner";
-
-        const title = document.createElement("h2");
-        title.className = "cardTitle";
-        const a = document.createElement("a");
-        a.href = it.link || "#";
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.textContent = it.title;
-        title.appendChild(a);
-
-        const meta = document.createElement("div");
-        meta.className = "cardMeta";
-
-        const date = document.createElement("span");
-        date.textContent = it.pubNice || "";
-        meta.appendChild(date);
-
-        const tag = document.createElement("span");
-        tag.className = "tag";
-        tag.textContent = it.host;
-        meta.appendChild(tag);
-
-        const preview = document.createElement("div");
-        preview.className = "preview";
-        if (mode === "preview") {
-          preview.textContent = it.preview || "";
-        } else {
-          preview.innerHTML = it.descHtml || "";
-        }
-
-        const actions = document.createElement("div");
-        actions.className = "actions";
-
-        const open = document.createElement("a");
-        open.className = "btnLink";
-        open.href = it.link || "#";
-        open.target = "_blank";
-        open.rel = "noopener noreferrer";
-        open.textContent = "Open article";
-        actions.appendChild(open);
-
-        inner.appendChild(title);
-        inner.appendChild(meta);
-        inner.appendChild(preview);
-        inner.appendChild(actions);
-
-        card.appendChild(inner);
-        list.appendChild(card);
-      }
-    }
-
-    (async function init(){
-      const qInput = document.getElementById("q");
-      const modeSel = document.getElementById("mode");
-      const clearBtn = document.getElementById("clear");
-      const siteSel = document.getElementById("site");
-      const copyBtn = document.getElementById("copy");
-
-      let items = [];
-      try {
-        items = await loadFeed();
-      } catch (e) {
-        document.getElementById("status").textContent = e.message;
-        return;
-      }
-
-      populateSites(items);
-
-      function rerender(){
-        render(items, modeSel.value, qInput.value, siteSel.value);
-      }
-
-      copyBtn.addEventListener("click", async () => {
-        const url = feedUrlForSelectedSite();
-        try {
-          await navigator.clipboard.writeText(url);
-          showToast("Copied: " + url);
-        } catch {
-          showToast("Copy failed. URL: " + url);
-        }
-      });
-
-      qInput.addEventListener("input", rerender);
-      modeSel.addEventListener("change", rerender);
-      siteSel.addEventListener("change", rerender);
-
-      clearBtn.addEventListener("click", () => {
-        qInput.value = "";
-        modeSel.value = "preview";
-        siteSel.value = "";
-        rerender();
-      });
-
-      rerender();
-    })();
-  </script>
+    const rerender = () => render(items, modeSel.value, qInput.value);
+    qInput.addEventListener("input", rerender);
+    modeSel.addEventListener("change", rerender);
+    clearBtn.addEventListener("click", () => { qInput.value = ""; modeSel.value = "preview"; rerender(); });
+    rerender();
+  })();
+</script>
 </body>
 </html>
