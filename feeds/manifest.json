@@ -1,0 +1,97 @@
+{
+  "generated_utc": "2026-03-06T12:59:20.024614+00:00",
+  "title": "My Merged Feed",
+  "total_sites": 15,
+  "feeds": [
+    {
+      "host": "bellevuechristiancounseling.com",
+      "slug": "bellevuechristiancounseling-com",
+      "path": "feeds/bellevuechristiancounseling-com.xml",
+      "count": 12
+    },
+    {
+      "host": "bothellcounseling.com",
+      "slug": "bothellcounseling-com",
+      "path": "feeds/bothellcounseling-com.xml",
+      "count": 10
+    },
+    {
+      "host": "cachristiancounseling.com",
+      "slug": "cachristiancounseling-com",
+      "path": "feeds/cachristiancounseling-com.xml",
+      "count": 12
+    },
+    {
+      "host": "everettchristiancounseling.com",
+      "slug": "everettchristiancounseling-com",
+      "path": "feeds/everettchristiancounseling-com.xml",
+      "count": 10
+    },
+    {
+      "host": "greenlakecounseling.com",
+      "slug": "greenlakecounseling-com",
+      "path": "feeds/greenlakecounseling-com.xml",
+      "count": 10
+    },
+    {
+      "host": "lachristiancounseling.com",
+      "slug": "lachristiancounseling-com",
+      "path": "feeds/lachristiancounseling-com.xml",
+      "count": 12
+    },
+    {
+      "host": "longviewchristiancounseling.com",
+      "slug": "longviewchristiancounseling-com",
+      "path": "feeds/longviewchristiancounseling-com.xml",
+      "count": 10
+    },
+    {
+      "host": "millcreekchristiancounseling.com",
+      "slug": "millcreekchristiancounseling-com",
+      "path": "feeds/millcreekchristiancounseling-com.xml",
+      "count": 10
+    },
+    {
+      "host": "orangecountychristiancounseling.com",
+      "slug": "orangecountychristiancounseling-com",
+      "path": "feeds/orangecountychristiancounseling-com.xml",
+      "count": 12
+    },
+    {
+      "host": "redmondchristiancounseling.com",
+      "slug": "redmondchristiancounseling-com",
+      "path": "feeds/redmondchristiancounseling-com.xml",
+      "count": 12
+    },
+    {
+      "host": "seattlechristiancounseling.com",
+      "slug": "seattlechristiancounseling-com",
+      "path": "feeds/seattlechristiancounseling-com.xml",
+      "count": 12
+    },
+    {
+      "host": "spokanechristiancounseling.com",
+      "slug": "spokanechristiancounseling-com",
+      "path": "feeds/spokanechristiancounseling-com.xml",
+      "count": 12
+    },
+    {
+      "host": "tacomachristiancounseling.com",
+      "slug": "tacomachristiancounseling-com",
+      "path": "feeds/tacomachristiancounseling-com.xml",
+      "count": 12
+    },
+    {
+      "host": "texaschristiancounseling.com",
+      "slug": "texaschristiancounseling-com",
+      "path": "feeds/texaschristiancounseling-com.xml",
+      "count": 12
+    },
+    {
+      "host": "vancouverchristiancounseling.com",
+      "slug": "vancouverchristiancounseling-com",
+      "path": "feeds/vancouverchristiancounseling-com.xml",
+      "count": 10
+    }
+  ]
+}
