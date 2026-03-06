@@ -1,9 +1,153 @@
 <!doctype html>
-<html>
-  <head><meta charset="utf-8"><title>Feeds</title></head>
-  <body>
-    <h1>Feeds folder</h1>
-    <p>This folder contains per-site RSS XML files.</p>
-    <p>Open a specific file like: <code>/feeds/example-com.xml</code></p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Split Feeds</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; max-width: 1000px; margin: 24px auto; padding: 0 16px; }
+    h1 { margin: 0 0 8px; }
+    .muted { color: #666; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0 18px; }
+    input { padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; min-width: 260px; flex: 1; }
+    button { padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; cursor: pointer; }
+    button:hover { background: #f3f3f3; }
+    .item { border: 1px solid #e6e6e6; border-radius: 12px; padding: 12px; margin: 10px 0; }
+    .top { display:flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .host { font-weight: 700; }
+    .url { word-break: break-all; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; color: #333; margin-top: 6px; }
+    .pill { font-size: 12px; padding: 3px 8px; border: 1px solid #ddd; border-radius: 999px; color: #444; }
+    .toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); background: #111; color: #fff;
+             padding: 10px 12px; border-radius: 12px; display: none; max-width: 92vw; }
+  </style>
+</head>
+<body>
+  <h1>Split Feeds</h1>
+  <div class="muted">
+    This page lists per-site feeds generated from your merged feed.
+    Main feed: <a href="../merged.xml">../merged.xml</a>
+  </div>
+
+  <div class="row">
+    <input id="q" type="search" placeholder="Search by website name (hostname)..." />
+    <button id="copyAll">Copy main merged feed URL</button>
+  </div>
+
+  <div class="muted" id="status">Loading...</div>
+  <div id="list"></div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => t.style.display = "none", 1600);
+    }
+
+    function basePath() {
+      // e.g. https://jumangs.github.io/rss-merged-feed
+      const p = location.pathname.replace(/\/feeds\/.*$/, "");
+      return location.origin + p.replace(/\/$/, "");
+    }
+
+    function feedUrl(path) {
+      return basePath() + "/" + path.replace(/^\//, "");
+    }
+
+    async function copyText(txt) {
+      try {
+        await navigator.clipboard.writeText(txt);
+        showToast("Copied");
+      } catch {
+        showToast("Copy failed. " + txt);
+      }
+    }
+
+    function render(feeds, query) {
+      const list = document.getElementById("list");
+      const q = (query || "").trim().toLowerCase();
+
+      const filtered = !q ? feeds : feeds.filter(f => (f.host || "").toLowerCase().includes(q));
+
+      document.getElementById("status").textContent =
+        `Showing ${filtered.length} of ${feeds.length} sites.`;
+
+      list.innerHTML = "";
+
+      for (const f of filtered) {
+        const url = feedUrl(f.path);
+
+        const div = document.createElement("div");
+        div.className = "item";
+
+        const top = document.createElement("div");
+        top.className = "top";
+
+        const left = document.createElement("div");
+        const host = document.createElement("div");
+        host.className = "host";
+        host.textContent = f.host || f.slug || "unknown";
+        left.appendChild(host);
+
+        const meta = document.createElement("div");
+        meta.className = "muted";
+        meta.innerHTML = `<span class="pill">${f.count || 0} items</span>`;
+        left.appendChild(meta);
+
+        const right = document.createElement("div");
+        const open = document.createElement("a");
+        open.href = url;
+        open.textContent = "Open";
+        open.style.marginRight = "10px";
+
+        const copy = document.createElement("button");
+        copy.textContent = "Copy feed URL";
+        copy.addEventListener("click", () => copyText(url));
+
+        right.appendChild(open);
+        right.appendChild(copy);
+
+        top.appendChild(left);
+        top.appendChild(right);
+
+        const u = document.createElement("div");
+        u.className = "url";
+        u.textContent = url;
+
+        div.appendChild(top);
+        div.appendChild(u);
+        list.appendChild(div);
+      }
+    }
+
+    async function init() {
+      const q = document.getElementById("q");
+      const copyAll = document.getElementById("copyAll");
+
+      const mergedUrl = basePath() + "/merged.xml";
+      copyAll.addEventListener("click", () => copyText(mergedUrl));
+
+      let manifest;
+      try {
+        const res = await fetch("./manifest.json", { cache: "no-store" });
+        if (!res.ok) throw new Error("manifest.json not found yet.");
+        manifest = await res.json();
+      } catch (e) {
+        document.getElementById("status").textContent =
+          "Cannot load feeds/manifest.json yet. Run your workflow once after adding manifest generation in merge.py.";
+        return;
+      }
+
+      const feeds = manifest.feeds || [];
+      render(feeds, "");
+
+      q.addEventListener("input", () => render(feeds, q.value));
+    }
+
+    init();
+  </script>
+</body>
 </html>
