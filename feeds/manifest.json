@@ -1,7 +1,7 @@
 {
-  "generated_utc": "2026-06-28T02:34:57.396390+00:00",
+  "generated_utc": "2026-06-29T02:34:34.458890+00:00",
   "title": "Merged Feed",
-  "total_sites": 15,
+  "total_sites": 16,
   "feeds": [
     {
       "host": "bellevuechristiancounseling.com",
@@ -38,6 +38,12 @@
       "slug": "lachristiancounseling-com",
       "path": "feeds/lachristiancounseling-com.xml",
       "count": 12
+    },
+    {
+      "host": "longviewchristiancounseling.com",
+      "slug": "longviewchristiancounseling-com",
+      "path": "feeds/longviewchristiancounseling-com.xml",
+      "count": 10
     },
     {
       "host": "millcreekchristiancounseling.com",
