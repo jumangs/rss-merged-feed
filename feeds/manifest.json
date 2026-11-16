@@ -1,7 +1,7 @@
 {
-  "generated_utc": "2026-11-15T03:50:43.713334+00:00",
+  "generated_utc": "2026-11-16T03:51:03.337130+00:00",
   "title": "Merged Feed",
-  "total_sites": 15,
+  "total_sites": 16,
   "feeds": [
     {
       "host": "bellevuechristiancounseling.com",
@@ -85,6 +85,12 @@
       "host": "tacomachristiancounseling.com",
       "slug": "tacomachristiancounseling-com",
       "path": "feeds/tacomachristiancounseling-com.xml",
+      "count": 12
+    },
+    {
+      "host": "texaschristiancounseling.com",
+      "slug": "texaschristiancounseling-com",
+      "path": "feeds/texaschristiancounseling-com.xml",
       "count": 12
     },
     {
