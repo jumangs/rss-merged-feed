@@ -1,19 +1,13 @@
 {
-  "generated_utc": "2026-11-24T07:37:30.892336+00:00",
+  "generated_utc": "2026-11-25T06:05:46.047087+00:00",
   "title": "Merged Feed",
-  "total_sites": 16,
+  "total_sites": 14,
   "feeds": [
     {
       "host": "bellevuechristiancounseling.com",
       "slug": "bellevuechristiancounseling-com",
       "path": "feeds/bellevuechristiancounseling-com.xml",
       "count": 12
-    },
-    {
-      "host": "bothellcounseling.com",
-      "slug": "bothellcounseling-com",
-      "path": "feeds/bothellcounseling-com.xml",
-      "count": 10
     },
     {
       "host": "cachristiancounseling.com",
@@ -92,12 +86,6 @@
       "slug": "texaschristiancounseling-com",
       "path": "feeds/texaschristiancounseling-com.xml",
       "count": 12
-    },
-    {
-      "host": "vancouverchristiancounseling.com",
-      "slug": "vancouverchristiancounseling-com",
-      "path": "feeds/vancouverchristiancounseling-com.xml",
-      "count": 10
     }
   ]
 }
